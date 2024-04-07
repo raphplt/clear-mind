@@ -10,8 +10,12 @@ function blockSites() {
 		const currentUrl = window.location.href;
 		if (blockedSites.some((site) => currentUrl.includes(site))) {
 			window.location.href = redirectUrl;
+			console.log("Site bloqué");
+		} else {
+			console.log("Site non bloqué");
 		}
 	}
+        
 
 	// Vérifie si le timer est en cours et bloque les sites si nécessaire
 	api.runtime.onMessage.addListener(function (message, sender, sendResponse) {

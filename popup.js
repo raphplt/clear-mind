@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	stopTimerButton.addEventListener("click", function () {
+		api.runtime.sendMessage({ action: "stopTimer" });
 		console.log("Stopping timer");
-		port.postMessage({ action: "stopTimer" });
 	});
 });

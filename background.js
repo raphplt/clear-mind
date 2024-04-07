@@ -40,6 +40,12 @@ function startTimer(duration) {
 		}
 		timerId = setInterval(updateTimer, 1000); // Démarre le timer
 	});
+	    api.tabs.query({}, function (tabs) {
+						for (let i = 0; i < tabs.length; i++) {
+							api.tabs.sendMessage(tabs[i].id, { action: "timerStarted" });
+						}
+					});
+	
 }
 
 function updateTimer() {
