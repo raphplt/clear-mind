@@ -1,6 +1,6 @@
 const api = typeof browser === "undefined" ? chrome : browser;
 let popupPort = null;
-let timerId = null; // Ajout d'une variable pour stocker l'ID du timer
+let timerId = null;
 
 api.runtime.onConnect.addListener(function (port) {
 	if (port.name === "popup") {
@@ -28,24 +28,22 @@ api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 });
 
 function startTimer(duration) {
-	const endTime = Date.now() + duration * 60 * 1000; // Fin du timer en millisecondes
+	const endTime = Date.now() + duration * 60 * 1000;
 	api.storage.local.set({ timerEndTime: endTime }, function () {
 		console.log("Timer started for " + duration + " minutes");
-		// Envoie un message à la popup avec la durée du timer, si la popup est prête
 		if (popupPort) {
 			console.log("Sending timerStarted message to popup");
 			popupPort.postMessage({ action: "timerStarted", duration: duration });
 		} else {
 			console.log("Popup not ready");
 		}
-		timerId = setInterval(updateTimer, 1000); // Démarre le timer
+		timerId = setInterval(updateTimer, 1000);
 	});
-	    api.tabs.query({}, function (tabs) {
-						for (let i = 0; i < tabs.length; i++) {
-							api.tabs.sendMessage(tabs[i].id, { action: "timerStarted" });
-						}
-					});
-	
+
+	// Active les règles de blocage des sites
+	api.declarativeNetRequest.updateDynamicRules({
+		addRules: [{ id: 1 }, { id: 2 }, { id: 3 }],
+	});
 }
 
 function updateTimer() {
@@ -53,7 +51,6 @@ function updateTimer() {
 		const endTime = result.timerEndTime;
 		if (endTime) {
 			const remainingTime = Math.max(0, endTime - Date.now());
-			// Envoie un message à la popup avec le temps restant
 			if (popupPort) {
 				popupPort.postMessage({
 					action: "timerUpdate",
@@ -70,15 +67,19 @@ function stopTimer() {
 	console.log("Stopping timer and clearing storage");
 	api.storage.local.remove("timerEndTime", function () {
 		console.log("Timer stopped");
-		// Envoie un message à la popup pour indiquer que le timer est arrêté
 		if (popupPort) {
 			popupPort.postMessage({ action: "timerStopped" });
 		} else {
 			console.log("Popup not ready");
 		}
 		if (timerId) {
-			clearInterval(timerId); // Arrête le timer
+			clearInterval(timerId);
 			timerId = null;
 		}
+	});
+
+	// Désactive les règles de blocage des sites
+	api.declarativeNetRequest.updateDynamicRules({
+		removeRuleIds: [1, 2, 3],
 	});
 }
