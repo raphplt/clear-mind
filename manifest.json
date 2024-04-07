@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Concentration Helper",
+  "version": "1.0",
+  "description": "An extension to help concentration by blocking distracting sites during a timer.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/ext-icon.png",
+      "24": "assets/ext-icon.png",
+      "32": "assets/ext-icon.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "blocked.html"
+      ],
+      "matches": [
+        "*://*.instagram.com/*",
+        "*://*.youtube.com/*",
+        "*://*.twitter.com/*"
+      ]
+    }
+  ]
+}
