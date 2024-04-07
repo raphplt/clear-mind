@@ -1,28 +1,50 @@
+const api = typeof browser === "undefined" ? chrome : browser;
+
 document.addEventListener("DOMContentLoaded", function () {
 	const startTimerButton = document.getElementById("startTimerButton");
 	const timerDurationInput = document.getElementById("timerDurationInput");
 	const timerDisplay = document.getElementById("timerDisplay");
+	const stopTimerButton = document.getElementById("stopTimerButton");
 
-	let timerInterval; // Variable pour stocker l'ID de l'intervalle du timer
+	const port = api.runtime.connect({ name: "popup" });
+
+	// Récupère l'état du timer à l'ouverture de la popup
+	api.storage.local.get(["timerRunning"], function (result) {
+		if (result.timerRunning) {
+			startTimerButton.disabled = true;
+			stopTimerButton.disabled = false;
+		} else {
+			startTimerButton.disabled = false;
+			stopTimerButton.disabled = true;
+		}
+	});
 
 	startTimerButton.addEventListener("click", function () {
 		const duration = parseInt(timerDurationInput.value);
-		if (duration > 0) {
-			// Envoie un message au script de fond pour démarrer le timer
-			chrome.runtime.sendMessage({ action: "startTimer", duration: duration });
+		if (!startTimerButton.disabled && duration > 0) {
+			api.runtime.sendMessage({ action: "startTimer", duration: duration });
+			startTimerButton.disabled = true;
+			stopTimerButton.disabled = false;
+			api.storage.local.set({ timerRunning: true }); // Stocke l'état du timer
 		} else {
 			alert("Please enter a valid timer duration");
 		}
 	});
 
-	// Écoute les messages du script de fond
-	chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-		if (message.action === "timerUpdate") {
+	port.onMessage.addListener(function (message, sender, sendResponse) {
+		if (message.action === "timerStarted") {
+			console.log("Timer started");
+			updateTimerDisplay(message.duration * 60 * 1000);
+		} else if (message.action === "timerStopped") {
+			api.storage.local.set({ timerRunning: false }); // Stocke l'état du timer
+			startTimerButton.disabled = false;
+			stopTimerButton.disabled = true;
+			updateTimerDisplay(0);
+		} else if (message.action === "timerUpdate") {
 			updateTimerDisplay(message.remainingTime);
 		}
 	});
 
-	// Fonction pour mettre à jour l'affichage du timer
 	function updateTimerDisplay(remainingTime) {
 		const minutes = Math.floor(remainingTime / (1000 * 60));
 		const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
@@ -30,4 +52,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			seconds < 10 ? "0" : ""
 		}${seconds}`;
 	}
+
+	stopTimerButton.addEventListener("click", function () {
+		console.log("Stopping timer");
+		port.postMessage({ action: "stopTimer" });
+	});
 });

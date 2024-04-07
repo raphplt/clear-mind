@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Site Blocked</title>
+    <style>
+        body {
+            text-align: center;
+            padding: 10%;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Site Blocked</h1>
+    <p>The site you are trying to access has been blocked by your settings.</p>
+    <button id="goBackButton">Go Back</button>
+
+    <script>
+        document.getElementById("goBackButton").addEventListener("click", function () {
+            window.history.back();
+        });
+    </script>
+</body>
+
+</html>
