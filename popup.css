@@ -1,10 +1,146 @@
 /* popup.css */
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+h1, h2, h3, h4, h5, h6, p, ul, ol, li, button {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  font-weight: normal;
+  font: inherit;
+  vertical-align: baseline;
+  list-style: none;
+  
+}
+
+button {
+  background: none;
+  border: none;
+  outline: none;
+}
+
 body {
   font-family: Arial, sans-serif;
+  margin: 10px;
+  margin-bottom: 20px;
 }
 
 button {
   padding: 10px 20px;
   margin: 10px;
   cursor: pointer;
+}
+
+.logo-top {
+  display: block;
+  margin: 0 auto;
+  width: 300px;
+}
+
+.title-top {
+  text-align: center;
+  font-size: 20px;
+  margin: 10px 0;
+  color: #FF99DD;
+  margin-bottom: 30px;
+}
+
+.timer-zone{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.add-time {
+  background: #66BFFF;
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 18px;
+}
+
+.add-time:hover {
+  background: #4DA6FF;
+  transition: 0.3s;
+  transform: scale(1.1);
+}
+
+#timerDisplay,
+#timerDurationInput,
+.add-time {
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+#timerDisplay,
+#timerDurationInput {
+  flex: 1;
+}
+
+.add-time {
+  background: #66BFFF;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
+}
+
+.input-zone{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.input-time{
+  width: 100px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  font-size: 28px;
+  color: #B1E08A;
+}
+
+.input-time:focus {
+  outline: none;
+}
+
+.stop-timer {
+  background: #FF9999;
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 18px;
+  margin: 0 auto;
+  display: block;
+}
+
+.stop-timer:hover {
+  background: #FF6666;
+  transition: 0.3s;
+  transform: scale(1.1);
+}
+
+.start-timer {
+  background: #B1E08A;
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 18px;
+  margin: 0 auto;
+  display: block;
+}
+
+.start-timer:hover {
+  background: #8CD775;
+  transition: 0.3s;
+  transform: scale(1.1);
 }
