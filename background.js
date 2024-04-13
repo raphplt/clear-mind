@@ -41,9 +41,9 @@ function startTimer(duration) {
 	});
 
 	// Active les règles de blocage des sites
-	api.declarativeNetRequest.updateDynamicRules({
-		addRules: [{ id: 1 }, { id: 2 }, { id: 3 }],
-	});
+	// api.declarativeNetRequest.updateDynamicRules({
+	// 	addRules: [{ id: 1 }, { id: 2 }, { id: 3 }],
+	// });
 }
 
 function updateTimer() {
@@ -78,8 +78,11 @@ function stopTimer() {
 		}
 	});
 
-	// Désactive les règles de blocage des sites
-	api.declarativeNetRequest.updateDynamicRules({
-		removeRuleIds: [1, 2, 3],
-	});
+	if (api.declarativeNetRequest) {
+		api.declarativeNetRequest.updateDynamicRules({
+			removeRuleIds: [1, 2, 3],
+		});
+	} else {
+		console.log("Declarative Net Request API not available");
+	}
 }
