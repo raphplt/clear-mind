@@ -4,7 +4,6 @@ const api = typeof browser === "undefined" ? chrome : browser;
 const startStopButton = document.getElementById("startStopTimerButton");
 
 document.addEventListener("DOMContentLoaded", function () {
-	// Fonction pour récupérer et mettre à jour l'état du timer
 	api.storage.local.get(
 		["startTime", "totalTimeInSeconds", "timerValue", "timerRunning"],
 		function (result) {
@@ -15,16 +14,14 @@ document.addEventListener("DOMContentLoaded", function () {
 				const remainingSeconds = result.totalTimeInSeconds - elapsedSeconds;
 				if (remainingSeconds > 0) {
 					console.log("Remaining seconds: " + remainingSeconds);
-					// Si le timer est en cours d'exécution, le démarrer
 					startTimer(remainingSeconds);
 					startStopButton.textContent = "Stop Timer";
 					timerDisplay.value = formatTime(
 						Math.floor(remainingSeconds / 3600),
 						Math.floor((remainingSeconds % 3600) / 60),
 						remainingSeconds % 60
-					); // Mettre à jour la valeur du timer affichée
+					);
 
-					// Ajout d'un intervalle pour mettre à jour l'affichage du timer
 					if (timerRunning) {
 						timerInterval = setInterval(function () {
 							const elapsedSeconds = Math.floor(
@@ -45,12 +42,10 @@ document.addEventListener("DOMContentLoaded", function () {
 					startStopButton.textContent = "Start Timer";
 				}
 			} else {
-				// Si aucune donnée n'est trouvée dans le stockage, utiliser la valeur par défaut
 				console.log("No data found in storage");
 				resetTimerDisplay();
 			}
 
-			// Ajouter les écouteurs d'événements après avoir initialisé le timer
 			startStopButton.addEventListener("click", toggleTimer);
 			document.getElementById("add-10").addEventListener("click", addTime);
 			document.getElementById("remove-10").addEventListener("click", removeTime);
@@ -61,10 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
 function toggleTimer() {
 	if (timerRunning) {
 		stopTimer();
-		startStopButton.textContent = "Start Timer"; // Changer le texte du bouton en "Start Timer"
+		startStopButton.textContent = "Start focus";
+		startStopButton.style.backgroundColor = "#B1E08A";
 	} else {
 		startTimer();
-		startStopButton.textContent = "Stop Timer"; // Changer le texte du bouton en "Stop Timer"
+		startStopButton.textContent = "Reset";
+		startStopButton.style.backgroundColor = "#FF9999";
 	}
 }
 
@@ -94,7 +91,6 @@ function startTimer(remainingSeconds) {
 			totalTimeInSeconds--;
 			updateTimerDisplay(totalTimeInSeconds);
 
-			// Enregistrer la valeur du timer dans le stockage local
 			api.storage.local.set({
 				timerValue: timerDisplay.value,
 				totalTimeInSeconds: totalTimeInSeconds,
@@ -117,19 +113,17 @@ function startTimer(remainingSeconds) {
 function stopTimer() {
 	clearInterval(timerInterval);
 	timerRunning = false;
-	api.storage.local.set({ timerRunning: false }); // Enregistrer l'état du timer dans le stockage local
+	api.storage.local.set({ timerRunning: false });
 	api.storage.local.remove(["startTime", "totalTimeInSeconds"]);
 
-	resetTimerDisplay(); // Réinitialiser la valeur du timer à 30 minutes
-	// Envoyer un message au background script pour arrêter le blocage des sites
+	resetTimerDisplay();
 	api.runtime.sendMessage({ action: "stopTimer" });
 
-	// Supprimer la valeur du timer du stockage local
 	chrome.storage.local.remove("timerValue");
 }
 
 function resetTimerDisplay() {
-	const defaultTime = "00:30:00"; // Valeur par défaut du timer (30 minutes)
+	const defaultTime = "00:30:00";
 	document.getElementById("timerDisplay").value = defaultTime;
 }
 

@@ -1,5 +1,5 @@
 const api = typeof browser === "undefined" ? chrome : browser;
-let blockingEnabled = false; // Désactiver le blocage des sites par défaut
+let blockingEnabled = false;
 
 api.runtime.onInstalled.addListener(function () {
 	api.storage.sync.set({
@@ -18,8 +18,7 @@ api.webNavigation.onDOMContentLoaded.addListener(function (details) {
 					api.scripting.executeScript({
 						target: { tabId: details.tabId },
 						func: () => {
-							// Injecter le code pour afficher le bloqueur
-							document.body.innerHTML = "<h1>This site is blocked!</h1>";
+							document.body.innerHTML = "<h1> This site is blocked!</ > ";
 						},
 					});
 					break;
@@ -31,10 +30,10 @@ api.webNavigation.onDOMContentLoaded.addListener(function (details) {
 
 api.runtime.onMessage.addListener(function (message) {
 	if (message.action === "startTimer") {
-		blockingEnabled = true; // Activer le blocage des sites
+		blockingEnabled = true; 
 		console.log("Blocking enabled");
 	} else if (message.action === "stopTimer") {
-		blockingEnabled = false; // Désactiver le blocage des sites
+		blockingEnabled = false; 
 		console.log("Blocking disabled");
 	}
 });
