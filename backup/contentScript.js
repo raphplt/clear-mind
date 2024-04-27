@@ -2,7 +2,9 @@ const api = typeof browser === "undefined" ? chrome : browser;
 const blockedSites = ["instagram.com", "youtube.com", "twitter.com"];
 let shouldBlockSites = false;
 
-// Vérifie si la page actuelle correspond à l'un des sites bloqués et redirige si nécessaire
+// Connexion au port pour communiquer avec le script de fond
+const port = api.runtime.connect({ name: "contentScript" });
+
 function blockSite() {
 	const currentUrl = window.location.href;
 	if (
@@ -16,10 +18,9 @@ function blockSite() {
 	}
 }
 
-// Fonction pour bloquer les sites pendant le timer
 function blockSites() {
-	// Vérifie si le timer est en cours et bloque les sites si nécessaire
-	api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+	// Écoute des messages provenant du script de fond
+	port.onMessage.addListener(function (message) {
 		if (message.action === "timerStarted") {
 			console.log("Timer démarré");
 			shouldBlockSites = true;
