@@ -32,20 +32,17 @@ api.storage.sync.get(["blockingEnabled"], function (result) {
     });
 
     api.runtime.onMessage.addListener(function (message) {
-        if (message.action === "startTimer") {
-            blockingEnabled = true;
-            // Enregistre la nouvelle valeur de blockingEnabled
-            api.storage.sync.set({ blockingEnabled: blockingEnabled }, function () {
-                console.log("Blocking enabled");
-            });
-        } else if (message.action === "stopTimer") {
-            blockingEnabled = false;
-            // Enregistre la nouvelle valeur de blockingEnabled
-            api.storage.sync.set({ blockingEnabled: blockingEnabled }, function () {
-                console.log("Blocking disabled");
-            });
-        }
-    });
+					if (message.action === "startTimer") {
+						blockingEnabled = true;
+						api.storage.sync.set({ blockingEnabled: blockingEnabled }, function () {
+							console.log("Blocking enabled");
+						});
+					} else if (message.action === "stopTimer") {
+						blockingEnabled = false;
+						api.storage.sync.set({ blockingEnabled: blockingEnabled }, function () {
+							console.log("Blocking disabled");
+						});
+					}
+				});
 
-    console.log("blocking enabled: ", blockingEnabled);
 });

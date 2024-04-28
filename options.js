@@ -1,9 +1,7 @@
 const api = typeof browser === "undefined" ? chrome : browser;
 
 document.addEventListener("DOMContentLoaded", (event) => {
-	// Récupère les valeurs enregistrées
 	api.storage.sync.get(["workTime", "breakTime"], function (result) {
-		// Définit les valeurs par défaut pour les champs du formulaire
 		if (result.workTime) {
 			var [hours, minutes, seconds] = result.workTime.split(":");
 			document.getElementById("workTimeHours").value = hours;
@@ -21,9 +19,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	document
 		.getElementById("optionsForm")
 		.addEventListener("submit", function (event) {
-			event.preventDefault(); // Empêche le rechargement de la page
+			event.preventDefault();
 
-			// Récupère les valeurs des champs du formulaire
 			var workTimeHours = document.getElementById("workTimeHours").value;
 			var workTimeMinutes = document.getElementById("workTimeMinutes").value;
 			var workTimeSeconds = document.getElementById("workTimeSeconds").value;
@@ -34,7 +31,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			var breakTimeSeconds = document.getElementById("breakTimeSeconds").value;
 			var breakTime = `${breakTimeHours}:${breakTimeMinutes}:${breakTimeSeconds}`;
 
-			// Enregistre les valeurs dans le stockage persistant
 			api.storage.sync.set(
 				{ workTime: workTime, breakTime: breakTime },
 				function () {
