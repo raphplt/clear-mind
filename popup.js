@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
 				const elapsedSeconds = Math.floor((Date.now() - result.startTime) / 1000);
 				const remainingSeconds = result.totalTimeInSeconds - elapsedSeconds;
 				if (remainingSeconds > 0) {
-					console.log("Remaining seconds: " + remainingSeconds);
 					startTimer(remainingSeconds);
-					startStopButton.textContent = "Stop Timer";
+					startStopButton.textContent = "Reset";
+					startStopButton.style.backgroundColor = "#FF9999";
 					timerDisplay.value = formatTime(
 						Math.floor(remainingSeconds / 3600),
 						Math.floor((remainingSeconds % 3600) / 60),
@@ -39,7 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
 					console.log("Time is up!");
 					stopTimer();
 					resetTimerDisplay();
-					startStopButton.textContent = "Start Timer";
+					startStopButton.textContent = "Start focus";
+					startStopButton.style.backgroundColor = "#B1E08A";
 				}
 			} else {
 				console.log("No data found in storage");
