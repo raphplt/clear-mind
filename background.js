@@ -6,8 +6,8 @@ api.storage.sync.get(["blockingEnabled"], function (result) {
 
     api.runtime.onInstalled.addListener(function () {
         api.storage.sync.set({
-            blockedSites: ["instagram.com", "youtube.com", "twitter.com"],
-        });
+									blockedSites: ["instagram.com", "youtube.com", "twitter.com", "x.com"],
+								});
     });
 
     api.webNavigation.onDOMContentLoaded.addListener(function (details) {
