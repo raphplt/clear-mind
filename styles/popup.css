@@ -144,3 +144,11 @@ button {
   transition: 0.3s;
   transform: scale(1.1);
 }
+
+.options {
+  text-decoration: none;
+  color: black;
+  background-color: #dae5f0;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
